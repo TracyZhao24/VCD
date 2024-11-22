@@ -6,9 +6,12 @@ from tqdm import tqdm
 import shortuuid
 import sys
 import os
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-# print(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+# print(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+# sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, (os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+print(sys.path)
 from llava.constants import IMAGE_TOKEN_INDEX, DEFAULT_IMAGE_TOKEN, DEFAULT_IM_START_TOKEN, DEFAULT_IM_END_TOKEN
 from llava.conversation import conv_templates, SeparatorStyle
 from llava.model.builder import load_pretrained_model
@@ -19,19 +22,38 @@ from PIL import Image
 import math
 
 # import kornia
-from transformers import set_seed
+# from transformers import set_seed
+import transformers
 from vcd_utils.vcd_add_noise import add_diffusion_noise
 from vcd_utils.vcd_sample import evolve_vcd_sampling
 evolve_vcd_sampling()
 
 
 def eval_model(args):
+    os.environ['HF_HOME'] = '/.cache/huggingface'
+    os.environ["TRANSFORMERS_CACHE"] = '/.cache/huggingface'
+    # make sure it is looking in the right cache
+    transformers_cache = os.getenv("TRANSFORMERS_CACHE") 
+    hf_home = os.getenv("HF_HOME")
+    print(transformers_cache, hf_home)
     # Model
     disable_torch_init()
     model_path = os.path.expanduser(args.model_path)
     model_name = get_model_name_from_path(model_path)
     tokenizer, model, image_processor, context_len = load_pretrained_model(model_path, args.model_base, model_name)
-
+    # print(image_processor, tokenizer, model)
+    # processor = transformers.LlavaNextProcessor.from_pretrained(model_name)
+    # image_processor = processor.image_processor
+    # tokenizer = processor.tokenizer
+    # model = transformers.LlavaNextForConditionalGeneration.from_pretrained(
+    #     model_name, 
+    #     torch_dtype=torch.float16,
+    #     low_cpu_mem_usage=True,
+    #     load_in_4bit=True,
+    #     # use_flash_attention_2=True
+    # )
+    # context_len = 2048
+    print("model loaded")
     questions = [json.loads(q) for q in open(os.path.expanduser(args.question_file), "r")]
     answers_file = os.path.expanduser(args.answers_file)
     os.makedirs(os.path.dirname(answers_file), exist_ok=True)
@@ -41,7 +63,7 @@ def eval_model(args):
         image_file = line["image"]
         qs = line["text"]
         cur_prompt = qs
-        if model.config.mm_use_im_start_end:
+        if hasattr(model.config, 'mm_use_im_start_end') and model.config.mm_use_im_start_end:
             qs = DEFAULT_IM_START_TOKEN + DEFAULT_IMAGE_TOKEN + DEFAULT_IM_END_TOKEN + '\n' + qs
         else:
             qs = DEFAULT_IMAGE_TOKEN + '\n' + qs
@@ -54,7 +76,10 @@ def eval_model(args):
         input_ids = tokenizer_image_token(prompt, tokenizer, IMAGE_TOKEN_INDEX, return_tensors='pt').unsqueeze(0).cuda()
 
         image = Image.open(os.path.join(args.image_folder, image_file))
-        image_tensor = image_processor.preprocess(image, return_tensors='pt')['pixel_values'][0]
+        # TODO: tracy figure out why getting error
+        # ValueError: Unable to create tensor, you should probably activate padding with 'padding=True' to have batched tensors with the same length.
+        # image_tensor = image_processor.preprocess(image, padding=True, return_tensors='pt')['pixel_values'][0]
+        image_tensor = image_processor(image, return_tensors='pt')['pixel_values'][0]
         
         if args.use_cd:
             image_tensor_cd = add_diffusion_noise(image_tensor, args.noise_step)
@@ -118,5 +143,5 @@ if __name__ == "__main__":
     parser.add_argument("--cd_beta", type=float, default=0.1)
     parser.add_argument("--seed", type=int, default=42)
     args = parser.parse_args()
-    set_seed(args.seed)
+    transformers.set_seed(args.seed)
     eval_model(args)
