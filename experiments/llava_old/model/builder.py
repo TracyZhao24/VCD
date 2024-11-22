@@ -128,7 +128,7 @@ def load_pretrained_model(model_path, model_base, model_name, load_8bit=False, l
                 tokenizer = AutoTokenizer.from_pretrained(model_path, use_fast=False)
                 model = AutoModelForCausalLM.from_pretrained(model_path, low_cpu_mem_usage=True, **kwargs)
 
-    # image_processor = None
+    image_processor = None
 
     if 'llava' in model_name.lower():
         mm_use_im_start_end = getattr(model.config, "mm_use_im_start_end", False)
@@ -139,12 +139,12 @@ def load_pretrained_model(model_path, model_base, model_name, load_8bit=False, l
             tokenizer.add_tokens([DEFAULT_IM_START_TOKEN, DEFAULT_IM_END_TOKEN], special_tokens=True)
         model.resize_token_embeddings(len(tokenizer))
 
-        # vision_tower = model.get_vision_tower()
+        vision_tower = model.get_vision_tower()
         # vision_tower = model.vision_tower
-        # # TODO tracy: figure out why vision_tower is None
-        # if not vision_tower.is_loaded:
-        #     vision_tower.load_model()LlavaConfig
-        # vision_tower.to(device=device, dtype=torch.float16)
+        # TODO tracy: figure out why vision_tower is None
+        if not vision_tower.is_loaded:
+            vision_tower.load_model()
+        vision_tower.to(device=device, dtype=torch.float16)
 
     if hasattr(model.config, "max_sequence_length"):
         context_len = model.config.max_sequence_length
