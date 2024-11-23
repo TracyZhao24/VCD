@@ -54,10 +54,12 @@ def eval_model(args):
     # )
     # context_len = 2048
     print("model loaded")
+
     questions = [json.loads(q) for q in open(os.path.expanduser(args.question_file), "r")]
     answers_file = os.path.expanduser(args.answers_file)
     os.makedirs(os.path.dirname(answers_file), exist_ok=True)
     ans_file = open(answers_file, "w")
+
     for line in tqdm(questions):
         idx = line["question_id"]
         image_file = line["image"]
@@ -76,7 +78,6 @@ def eval_model(args):
         input_ids = tokenizer_image_token(prompt, tokenizer, IMAGE_TOKEN_INDEX, return_tensors='pt').unsqueeze(0).cuda()
 
         image = Image.open(os.path.join(args.image_folder, image_file))
-        # TODO: tracy figure out why getting error
         # ValueError: Unable to create tensor, you should probably activate padding with 'padding=True' to have batched tensors with the same length.
         # image_tensor = image_processor.preprocess(image, padding=True, return_tensors='pt')['pixel_values'][0]
         image_tensor = image_processor(image, return_tensors='pt')['pixel_values'][0]
@@ -105,9 +106,16 @@ def eval_model(args):
                 use_cache=True)
 
         input_token_len = input_ids.shape[1]
+        # min_token_len = min(input_ids.shape[1], output_ids.shape[1])
+        # print("input id shape: ", input_ids.shape)
+        # print("output id shape: ", output_ids.shape)
+        # print(output_ids[:, :input_token_len])
+
         n_diff_input_output = (input_ids != output_ids[:, :input_token_len]).sum().item()
+        # n_diff_input_output = (input_ids[:, :min_token_len] != output_ids[:, :min_token_len]).sum().item()
         if n_diff_input_output > 0:
             print(f'[Warning] {n_diff_input_output} output_ids are not the same as the input_ids')
+
         outputs = tokenizer.batch_decode(output_ids[:, input_token_len:], skip_special_tokens=True)[0]
         outputs = outputs.strip()
         if outputs.endswith(stop_str):
