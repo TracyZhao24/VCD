@@ -60,6 +60,9 @@ def eval_model(args):
     os.makedirs(os.path.dirname(answers_file), exist_ok=True)
     ans_file = open(answers_file, "w")
 
+    # batch writes to the file
+    results = []
+    buffer_size = 100
     for line in tqdm(questions):
         idx = line["question_id"]
         image_file = line["image"]
@@ -122,14 +125,37 @@ def eval_model(args):
             outputs = outputs[:-len(stop_str)]
         outputs = outputs.strip()
 
-        ans_file.write(json.dumps({"question_id": idx,
-                                   "prompt": cur_prompt,
-                                   "text": outputs,
-                                   "model_id": model_name,
-                                   "image": image_file,
-                                   "metadata": {}}) + "\n")
-        ans_file.flush()
+        results.append({
+            "question_id": idx,  # Replace `i` with `idx` if you have it defined
+            "prompt": cur_prompt,  # Replace with your variable `cur_prompt`
+            "text": outputs,       # Replace with your variable `outputs`
+            "model_id": model_name,  # Replace with your variable `model_name`
+            "image": image_file,    # Replace with your variable `image_file`
+            "metadata": {}
+        })
+
+        # Write batch to file
+        if len(results) >= buffer_size:
+            # with open("output.jsonl", "a") as ans_file:  # Open in append mode
+            ans_file.writelines(json.dumps(obj) + "\n" for obj in results)
+            ans_file.flush()
+            results = []  # Clear the batch
+
+    # Write any remaining data
+    if results:
+        # with open("output.jsonl", "a") as ans_file:
+        ans_file.writelines(json.dumps(obj) + "\n" for obj in results)
+    ans_file.flush()
     ans_file.close()
+        
+        # ans_file.write(json.dumps({"question_id": idx,
+        #                         "prompt": cur_prompt,
+        #                         "text": outputs,
+        #                         "model_id": model_name,
+        #                         "image": image_file,
+        #                         "metadata": {}}) + "\n")
+    #     ans_file.flush()
+    # ans_file.close()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

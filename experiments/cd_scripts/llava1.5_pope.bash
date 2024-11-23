@@ -19,7 +19,7 @@ python "$SCRIPT_DIR/../eval/object_hallucination_vqa_llava.py" \
 --model-path ${model_path} \
 --question-file "$SCRIPT_DIR/../data/POPE/${dataset_name}/${dataset_name}_pope_${type}.json" \
 --image-folder ${image_folder} \
---answers-file "$SCRIPT_DIR/../output/llava-next_${dataset_name}_pope_${type}_answers_with_cd_seed${seed}.jsonl" \
+--answers-file "$SCRIPT_DIR/../output/llava-next/${dataset_name}_pope_${type}_answers_with_cd_seed${seed}.jsonl" \
 --use_cd \
 --cd_alpha $cd_alpha \
 --cd_beta $cd_beta \
