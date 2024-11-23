@@ -27,6 +27,7 @@ import transformers
 from vcd_utils.vcd_add_noise import add_diffusion_noise
 from vcd_utils.vcd_sample import evolve_vcd_sampling
 from vcd_utils.segmentation import draw_bounding_boxes
+from vcd_utils.random_crop import random_crop
 evolve_vcd_sampling()
 
 
@@ -84,11 +85,16 @@ def eval_model(args):
         image_path = os.path.join(args.image_folder, image_file)
         image = Image.open(image_path)
         image_tensor = image_processor(image, return_tensors='pt')['pixel_values'][0]
-        augmented_image = draw_bounding_boxes(image_path, max_objects=3)
-        augmented_image_tensor = image_processor(augmented_image, return_tensors='pt')['pixel_values'][0]
+        # DEBUG: verify that tensor shape is (C, H, W)
+        # print(image_tensor.shape)
+        # augmented_image = draw_bounding_boxes(image_path, max_objects=3)
+        # augmented_image_tensor = image_processor(augmented_image, return_tensors='pt')['pixel_values'][0]
 
         if args.use_cd:
-            image_tensor_cd = add_diffusion_noise(image_tensor, args.noise_step)
+            # image_tensor_cd = add_diffusion_noise(image_tensor, args.noise_step)
+            image_tensor_cd = random_crop(image_tensor, 0.7)
+            # DEBUG: verify that shape after cropping is same as image_tensor
+            # print(image_tensor_cd.shape)
         else:
             image_tensor_cd = None      
 
@@ -99,8 +105,8 @@ def eval_model(args):
         with torch.inference_mode():
             output_ids = model.generate(
                 input_ids,
-                # images=image_tensor.unsqueeze(0).half().cuda(),
-                images=augmented_image_tensor.unsqueeze(0).half().cuda(),
+                images=image_tensor.unsqueeze(0).half().cuda(),
+                # images=augmented_image_tensor.unsqueeze(0).half().cuda(),
                 images_cd=(image_tensor_cd.unsqueeze(0).half().cuda() if image_tensor_cd is not None else None),
                 cd_alpha = args.cd_alpha,
                 cd_beta = args.cd_beta,
