@@ -50,7 +50,6 @@ jupyter_core==5.7.2
 kiwisolver==1.4.7
 linkify-it-py==2.0.3
 lit==18.1.8
-llava @ git+https://github.com/haotian-liu/LLaVA.git@c121f0432da27facab705978f83c4ada465e46fd
 markdown-it-py==2.2.0
 MarkupSafe==3.0.2
 matplotlib==3.9.2
