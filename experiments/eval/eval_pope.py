@@ -10,10 +10,10 @@ parser.add_argument("--output_file", type=str, default="experiments/output/llava
 args = parser.parse_args()
 
 # open ground truth answers
-gt_files = [json.loads(q) for q in open(os.path.expanduser(args.gt_files), "r")]
+gt_files = [json.loads(q) for q in open(os.path.expanduser(args.gt_file), "r")]
 
 # open generated answers
-gen_files = [json.loads(q) for q in open(os.path.expanduser(args.gen_files), "r")]
+gen_files = [json.loads(q) for q in open(os.path.expanduser(args.gen_file), "r")]
 
 # calculate precision, recall, f1, accuracy, and the proportion of 'yes' answers
 true_pos = 0
