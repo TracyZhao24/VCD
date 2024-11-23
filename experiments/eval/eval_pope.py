@@ -62,7 +62,7 @@ unknown_prop = unknown / total_questions
 
 # report results and write to file
 with open(args.output_file, "w") as file:
-    file.write(f"results for {args.gen_files}")
+    file.write(f"results for {args.gen_file}")
     file.write(f"Precision: {precision}\n")
     file.write(f"Recall: {recall}\n")
     file.write(f"F1: {f1}\n")
@@ -70,7 +70,7 @@ with open(args.output_file, "w") as file:
     file.write(f"yes: {yes_proportion}\n")
     file.write(f"unknown: {unknown_prop}\n")
     
-print(f"Reporting results for {args.gen_files}")
+print(f"Reporting results for {args.gen_file}")
 print(f'Precision: {precision}')
 print(f'Recall: {recall}')
 print(f'F1: {f1}')
