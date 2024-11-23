@@ -4,9 +4,9 @@ import argparse
 from tqdm import tqdm
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--gt_file", type=str, default="experiments/data/POPE/coco_pope_popular.json")
-parser.add_argument("--gen_file", type=str, default="experiments/output/llava-next/coco_pope_random_answers_with_cd_seed55.jsonl")
-parser.add_argument("--output_file", type=str, default="experiments/output/llava-next/pope_eval_with_cd.txt")
+parser.add_argument("--gt_file", type=str, default="./data/POPE/coco/coco_pope_popular.json")
+parser.add_argument("--gen_file", type=str, default="./output/llava-next/coco_pope_random_answers_with_cd_seed55.jsonl")
+parser.add_argument("--output_file", type=str, default="./output/llava-next/pope_eval_with_cd.txt")
 args = parser.parse_args()
 
 # open ground truth answers
@@ -62,7 +62,7 @@ unknown_prop = unknown / total_questions
 
 # report results and write to file
 with open(args.output_file, "w") as file:
-    file.write(f"results for {args.gen_file}")
+    file.write(f"results for {args.gen_file}\n")
     file.write(f"Precision: {precision}\n")
     file.write(f"Recall: {recall}\n")
     file.write(f"F1: {f1}\n")
