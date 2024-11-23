@@ -4,8 +4,8 @@ import argparse
 from tqdm import tqdm
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--gt_files", type=str, default="experiments/data/POPE/coco_pope_popular.json")
-parser.add_argument("--gen_files", type=str, default="experiments/output/llava-next/coco_pope_random_answers_with_cd_seed55.jsonl")
+parser.add_argument("--gt_file", type=str, default="experiments/data/POPE/coco_pope_popular.json")
+parser.add_argument("--gen_file", type=str, default="experiments/output/llava-next/coco_pope_random_answers_with_cd_seed55.jsonl")
 parser.add_argument("--output_file", type=str, default="experiments/output/llava-next/pope_eval_with_cd.txt")
 args = parser.parse_args()
 
