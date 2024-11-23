@@ -4,8 +4,9 @@ import argparse
 from tqdm import tqdm
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--gt_files", type=str, default="data/POPE/coco_pope_popular.json")
-parser.add_argument("--gen_files", type=str, default="answer_files_POPE/llava15_coco_pope_popular_answers_no_cd.jsonl")
+parser.add_argument("--gt_files", type=str, default="experiments/data/POPE/coco_pope_popular.json")
+parser.add_argument("--gen_files", type=str, default="experiments/output/llava-next/coco_pope_random_answers_with_cd_seed55.jsonl")
+parser.add_argument("--output_file", type=str, default="experiments/output/llava-next/pope_eval_with_cd.txt")
 args = parser.parse_args()
 
 # open ground truth answers
@@ -58,10 +59,21 @@ f1 = 2 * precision * recall / (precision + recall)
 accuracy = (true_pos + true_neg) / total_questions
 yes_proportion = yes_answers / total_questions
 unknown_prop = unknown / total_questions
-# report results
+
+# report results and write to file
+with open(args.output_file, "w") as file:
+    file.write(f"results for {args.gen_files}")
+    file.write(f"Precision: {precision}\n")
+    file.write(f"Recall: {recall}\n")
+    file.write(f"F1: {f1}\n")
+    file.write(f"Accuracy: {accuracy}\n")
+    file.write(f"yes: {yes_proportion}\n")
+    file.write(f"unknown: {unknown_prop}\n")
+    
+print(f"Reporting results for {args.gen_files}")
 print(f'Precision: {precision}')
 print(f'Recall: {recall}')
 print(f'F1: {f1}')
 print(f'Accuracy: {accuracy}')
 print(f'yes: {yes_proportion}')
-print(f'unknow: {unknown_prop}')
+print(f'unknown: {unknown_prop}')
