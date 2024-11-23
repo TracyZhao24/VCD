@@ -2,9 +2,6 @@ SCRIPT_DIR=$(dirname "$0")
 seed=${1:-55}
 dataset_name=${2:-"coco"}
 type=${3:-"random"}
-# model_path=${4:-"./checkpoints/llava-v1.5-7b"}
-# model_path=${4:-"liuhaotian/llava-v1.5-7b"}
-# model_path=${4:-"llava-hf/llava-v1.6-mistral-7b-hf"}
 model_path=${4:-"liuhaotian/llava-v1.6-mistral-7b"}
 cd_alpha=${5:-1}
 cd_beta=${6:-0.1}
@@ -19,7 +16,7 @@ python "$SCRIPT_DIR/../eval/object_hallucination_vqa_llava.py" \
 --model-path ${model_path} \
 --question-file "$SCRIPT_DIR/../data/POPE/${dataset_name}/${dataset_name}_pope_${type}.json" \
 --image-folder ${image_folder} \
---answers-file "$SCRIPT_DIR/../output/llava-next/${dataset_name}_pope_${type}_answers_with_cd_seed${seed}.jsonl" \
+--answers-file "$SCRIPT_DIR/../output/llava-next/${dataset_name}_pope_${type}_answers_with_segment_cd_seed${seed}.jsonl" \
 --use_cd \
 --cd_alpha $cd_alpha \
 --cd_beta $cd_beta \

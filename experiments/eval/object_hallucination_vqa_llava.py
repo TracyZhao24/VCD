@@ -26,6 +26,7 @@ import math
 import transformers
 from vcd_utils.vcd_add_noise import add_diffusion_noise
 from vcd_utils.vcd_sample import evolve_vcd_sampling
+from vcd_utils.segmentation import draw_bounding_boxes
 evolve_vcd_sampling()
 
 
@@ -80,11 +81,12 @@ def eval_model(args):
 
         input_ids = tokenizer_image_token(prompt, tokenizer, IMAGE_TOKEN_INDEX, return_tensors='pt').unsqueeze(0).cuda()
 
-        image = Image.open(os.path.join(args.image_folder, image_file))
-        # ValueError: Unable to create tensor, you should probably activate padding with 'padding=True' to have batched tensors with the same length.
-        # image_tensor = image_processor.preprocess(image, padding=True, return_tensors='pt')['pixel_values'][0]
+        image_path = os.path.join(args.image_folder, image_file)
+        image = Image.open(image_path)
         image_tensor = image_processor(image, return_tensors='pt')['pixel_values'][0]
-        
+        augmented_image = draw_bounding_boxes(image_path, max_objects=3)
+        augmented_image_tensor = image_processor(augmented_image, return_tensors='pt')['pixel_values'][0]
+
         if args.use_cd:
             image_tensor_cd = add_diffusion_noise(image_tensor, args.noise_step)
         else:
@@ -97,7 +99,8 @@ def eval_model(args):
         with torch.inference_mode():
             output_ids = model.generate(
                 input_ids,
-                images=image_tensor.unsqueeze(0).half().cuda(),
+                # images=image_tensor.unsqueeze(0).half().cuda(),
+                images=augmented_image_tensor.unsqueeze(0).half().cuda(),
                 images_cd=(image_tensor_cd.unsqueeze(0).half().cuda() if image_tensor_cd is not None else None),
                 cd_alpha = args.cd_alpha,
                 cd_beta = args.cd_beta,
@@ -109,10 +112,6 @@ def eval_model(args):
                 use_cache=True)
 
         input_token_len = input_ids.shape[1]
-        # min_token_len = min(input_ids.shape[1], output_ids.shape[1])
-        # print("input id shape: ", input_ids.shape)
-        # print("output id shape: ", output_ids.shape)
-        # print(output_ids[:, :input_token_len])
 
         n_diff_input_output = (input_ids != output_ids[:, :input_token_len]).sum().item()
         # n_diff_input_output = (input_ids[:, :min_token_len] != output_ids[:, :min_token_len]).sum().item()
@@ -126,36 +125,26 @@ def eval_model(args):
         outputs = outputs.strip()
 
         results.append({
-            "question_id": idx,  # Replace `i` with `idx` if you have it defined
-            "prompt": cur_prompt,  # Replace with your variable `cur_prompt`
-            "text": outputs,       # Replace with your variable `outputs`
-            "model_id": model_name,  # Replace with your variable `model_name`
-            "image": image_file,    # Replace with your variable `image_file`
+            "question_id": idx,  
+            "prompt": cur_prompt,  
+            "text": outputs,       
+            "model_id": model_name,  
+            "image": image_file,    
             "metadata": {}
         })
 
         # Write batch to file
         if len(results) >= buffer_size:
-            # with open("output.jsonl", "a") as ans_file:  # Open in append mode
             ans_file.writelines(json.dumps(obj) + "\n" for obj in results)
             ans_file.flush()
             results = []  # Clear the batch
 
     # Write any remaining data
     if results:
-        # with open("output.jsonl", "a") as ans_file:
         ans_file.writelines(json.dumps(obj) + "\n" for obj in results)
     ans_file.flush()
     ans_file.close()
-        
-        # ans_file.write(json.dumps({"question_id": idx,
-        #                         "prompt": cur_prompt,
-        #                         "text": outputs,
-        #                         "model_id": model_name,
-        #                         "image": image_file,
-        #                         "metadata": {}}) + "\n")
-    #     ans_file.flush()
-    # ans_file.close()
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

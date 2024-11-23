@@ -129,7 +129,6 @@ def sample(
 
         if use_cd:
             ## cd_comments: forward pass of the model with distorted image input
-            print("preparing inputs for generation CD version")
             model_inputs_cd = self.prepare_inputs_for_generation_cd(input_ids, **model_kwargs_cd)
             outputs_cd = self(
                 **model_inputs_cd,
