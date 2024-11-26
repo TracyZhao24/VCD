@@ -1,0 +1,7 @@
+results for experiments/output/llava-next/coco_pope_random_answers_with_box_blur_cd_seed55.jsonl
+Precision: 0.9618456078083407
+Recall: 0.7226666666666667
+F1: 0.8252759802055577
+Accuracy: 0.847
+yes: 0.37566666666666665
+unknown: 0.0

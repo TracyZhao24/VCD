@@ -1,7 +1,7 @@
-results for ./output/llava-next/coco_pope_random_answers_with_cd_seed55.jsonl
-Precision: 0.9577836411609498
-Recall: 0.726
-F1: 0.825938566552901
-Accuracy: 0.847
-yes: 0.379
+results for ./output/llava-next/coco_pope_random_answers_with_colorjitter_seed55.jsonl
+Precision: 0.9232158988256549
+Recall: 0.6813333333333333
+F1: 0.7840429612581511
+Accuracy: 0.8123333333333334
+yes: 0.369
 unknown: 0.0

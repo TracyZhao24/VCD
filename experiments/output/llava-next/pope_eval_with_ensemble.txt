@@ -1,0 +1,7 @@
+results for ./output/llava-next/coco_ensemble.json
+Precision: 0.9645390070921985
+Recall: 0.7253333333333334
+F1: 0.8280060882800608
+Accuracy: 0.8493333333333334
+yes: 0.376
+unknown: 0.0
