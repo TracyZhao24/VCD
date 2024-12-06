@@ -8,6 +8,7 @@ dist
 result
 playground/data
 val2014
+*.pt
 
 answer_files_*
 build

@@ -6,18 +6,26 @@ from tqdm import tqdm
 import shortuuid
 import sys
 import os
+# print(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+# sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, (os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-# print(sys.path)
+print(sys.path)
 from llava.constants import IMAGE_TOKEN_INDEX, DEFAULT_IMAGE_TOKEN, DEFAULT_IM_START_TOKEN, DEFAULT_IM_END_TOKEN
 from llava.conversation import conv_templates, SeparatorStyle
 from llava.model.builder import load_pretrained_model
 from llava.utils import disable_torch_init
 from llava.mm_utils import tokenizer_image_token, get_model_name_from_path, KeywordsStoppingCriteria
+from vcd_utils.gaussian_box_blur import gaussian_blur_yolo_box
+from torchvision.transforms import ColorJitter, ToTensor, ToPILImage
+
 
 from PIL import Image
 import math
 
+# import kornia
+# from transformers import set_seed
 import transformers
 from vcd_utils.vcd_add_noise import add_diffusion_noise
 from vcd_utils.vcd_sample import evolve_vcd_sampling
@@ -38,15 +46,26 @@ def eval_model(args):
     model_path = os.path.expanduser(args.model_path)
     model_name = get_model_name_from_path(model_path)
     tokenizer, model, image_processor, context_len = load_pretrained_model(model_path, args.model_base, model_name)
+    # print(image_processor, tokenizer, model)
+    # processor = transformers.LlavaNextProcessor.from_pretrained(model_name)
+    # image_processor = processor.image_processor
+    # tokenizer = processor.tokenizer
+    # model = transformers.LlavaNextForConditionalGeneration.from_pretrained(
+    #     model_name, 
+    #     torch_dtype=torch.float16,
+    #     low_cpu_mem_usage=True,
+    #     load_in_4bit=True,
+    #     # use_flash_attention_2=True
+    # )
+    # context_len = 2048
     print("model loaded")
 
-    # verify value of cd flag
-    if args.use_cd:
-        print("using cd")
-    else:
-        print("not using cd")
+    # yolo_model = torch.hub.load('ultralytics/yolov5', 'yolov5s')  # 'yolov5s' is the small, fast version
+    # print("YOLO model loaded for object detection")
 
-    questions = [json.loads(q) for q in open(os.path.expanduser(args.question_file), "r")]
+    # questions = [json.loads(q) for q in open(os.path.expanduser(args.question_file), "r")]
+    with open(os.path.expanduser(args.question_file), 'r') as f:
+        questions = json.load(f)
     answers_file = os.path.expanduser(args.answers_file)
     os.makedirs(os.path.dirname(answers_file), exist_ok=True)
     ans_file = open(answers_file, "w")
@@ -55,9 +74,9 @@ def eval_model(args):
     results = []
     buffer_size = 100
     for line in tqdm(questions):
-        idx = line["question_id"]
+        idx = line["id"]
         image_file = line["image"]
-        qs = line["text"]
+        qs = line["query"]
         cur_prompt = qs
         if hasattr(model.config, 'mm_use_im_start_end') and model.config.mm_use_im_start_end:
             qs = DEFAULT_IM_START_TOKEN + DEFAULT_IMAGE_TOKEN + DEFAULT_IM_END_TOKEN + '\n' + qs
@@ -73,6 +92,9 @@ def eval_model(args):
 
         image_path = os.path.join(args.image_folder, image_file)
         image = Image.open(image_path)
+
+        color_jitter = ColorJitter(brightness=0.4, contrast=0.4, saturation=0.4, hue=0.1) # w/ diffusion noise
+        image = color_jitter(image)
         image_tensor = image_processor(image, return_tensors='pt')['pixel_values'][0]
         # DEBUG: verify that tensor shape is (C, H, W)
         # print(image_tensor.shape)
@@ -80,8 +102,10 @@ def eval_model(args):
         # augmented_image_tensor = image_processor(augmented_image, return_tensors='pt')['pixel_values'][0]
 
         if args.use_cd:
-            # image_tensor_cd = add_diffusion_noise(image_tensor, args.noise_step)
-            image_tensor_cd = random_crop(image_tensor, 0.7)
+            # blurred_image = gaussian_blur_yolo_box(image_path, yolo_model, 35)
+            # image_tensor_cd = image_processor(blurred_image, return_tensors='pt')['pixel_values'][0]
+            image_tensor_cd = add_diffusion_noise(image_tensor, args.noise_step)
+            # image_tensor_cd = random_crop(image_tensor, 0.7)
             # DEBUG: verify that shape after cropping is same as image_tensor
             # print(image_tensor_cd.shape)
         else:
@@ -109,6 +133,7 @@ def eval_model(args):
         input_token_len = input_ids.shape[1]
 
         n_diff_input_output = (input_ids != output_ids[:, :input_token_len]).sum().item()
+        # n_diff_input_output = (input_ids[:, :min_token_len] != output_ids[:, :min_token_len]).sum().item()
         if n_diff_input_output > 0:
             print(f'[Warning] {n_diff_input_output} output_ids are not the same as the input_ids')
 

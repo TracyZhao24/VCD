@@ -28,9 +28,9 @@ from llava.utils import rank0_print
 def load_pretrained_model(model_path, model_base, model_name, load_8bit=False, load_4bit=False, device_map="auto", torch_dtype="float16",attn_implementation="flash_attention_2", customized_config=None, overwrite_config=None, **kwargs):
     kwargs["device_map"] = device_map
 
-    print("line 29 ", model_path, model_base, model_name)
-    print("turning off flash attention")
-    print("sys path: ", sys.path)
+    # print("line 29 ", model_path, model_base, model_name)
+    # print("turning off flash attention")
+    # print("sys path: ", sys.path)
     attn_implementation=None
 
     if load_8bit:
@@ -73,8 +73,6 @@ def load_pretrained_model(model_path, model_base, model_name, load_8bit=False, l
                 model = LlavaMixtralForCausalLM.from_pretrained(model_base, low_cpu_mem_usage=True, config=lora_cfg_pretrained, attn_implementation=attn_implementation, **kwargs)
             elif "mistral" in model_name.lower():
                 from llava.model.language_model.llava_mistral import LlavaMistralConfig
-
-                print("here")
                 lora_cfg_pretrained = LlavaMistralConfig.from_pretrained(model_path)
                 # image_processor = LlavaNextProcessor.from_pretrained(model_path) # NEW
                 tokenizer = AutoTokenizer.from_pretrained(model_base, use_fast=False)
@@ -290,7 +288,7 @@ def load_pretrained_model(model_path, model_base, model_name, load_8bit=False, l
 
     rank0_print(f"Model Class: {model.__class__.__name__}")
     image_processor = None
-    print("MODEL CONFIG: ", model.config)
+    # print("MODEL CONFIG: ", model.config)
 
     if "llava" in model_name.lower() or is_multimodal:
         mm_use_im_start_end = getattr(model.config, "mm_use_im_start_end", False)
@@ -301,7 +299,7 @@ def load_pretrained_model(model_path, model_base, model_name, load_8bit=False, l
             tokenizer.add_tokens([DEFAULT_IM_START_TOKEN, DEFAULT_IM_END_TOKEN], special_tokens=True)
         model.resize_token_embeddings(len(tokenizer))
 
-        print("trying to load vision tower")
+        # print("loading vision tower")
         vision_tower = model.get_vision_tower()
         # vision_tower = model.vision_tower
         if hasattr(model.config, "vision_tower") and not vision_tower.is_loaded:
