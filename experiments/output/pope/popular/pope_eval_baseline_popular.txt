@@ -1,0 +1,7 @@
+results for /home/project/VCD/experiments/output/pope/popular/coco_pope_popular_answers_baseline_seed55.jsonl
+Precision: 0.9014821272885789
+Recall: 0.6893333333333334
+F1: 0.7812618058179072
+Accuracy: 0.807
+yes: 0.38233333333333336
+unknown: 0.0

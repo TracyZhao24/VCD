@@ -1,0 +1,7 @@
+results for ../output/pope/adversarial/coco_pope_adversarial_answers_vcd_seed55.jsonl
+Precision: 0.8811641067097817
+Recall: 0.7266666666666667
+F1: 0.7964925100474972
+Accuracy: 0.8143333333333334
+yes: 0.41233333333333333
+unknown: 0.0
