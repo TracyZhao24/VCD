@@ -1,0 +1,7 @@
+results for ../output/pope/adversarial/coco_pope_adversarial_answers_with_colorjitter_seed55.jsonl
+Precision: 0.8539232053422371
+Recall: 0.682
+F1: 0.7583395107487028
+Accuracy: 0.7826666666666666
+yes: 0.3993333333333333
+unknown: 0.0

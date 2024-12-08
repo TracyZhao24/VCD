@@ -84,9 +84,9 @@ def eval_model(args):
         input_ids = tokenizer_image_token(prompt, tokenizer, IMAGE_TOKEN_INDEX, return_tensors='pt').unsqueeze(0).cuda()
 
         # * Color Jitter *
-        # color_jitter = ColorJitter(brightness=0.4, contrast=0.4, saturation=0.4, hue=0.1) # acc: 0.812
+        color_jitter = ColorJitter(brightness=0.4, contrast=0.4, saturation=0.4, hue=0.1) # acc: 0.812
         # color_jitter = ColorJitter(brightness=0.7, contrast=0.7, saturation=0.7, hue=0.3) # acc: 0.801
-        color_jitter = ColorJitter(brightness=0.4, contrast=0.4, saturation=0.4, hue=0.1) # w/ diffusion noise
+        # color_jitter = ColorJitter(brightness=0.4, contrast=0.4, saturation=0.4, hue=0.1) # w/ diffusion noise
 
         image_path = os.path.join(args.image_folder, image_file)
         image = Image.open(image_path)

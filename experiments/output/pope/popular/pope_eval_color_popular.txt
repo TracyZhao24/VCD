@@ -1,0 +1,7 @@
+results for ../output/pope/popular/coco_pope_popular_answers_with_colorjitter_9k_seed55.jsonl
+Precision: 0.9000861326442722
+Recall: 0.6966666666666667
+F1: 0.7854190154077415
+Accuracy: 0.8096666666666666
+yes: 0.387
+unknown: 0.0

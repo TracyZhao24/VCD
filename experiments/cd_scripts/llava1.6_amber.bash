@@ -12,7 +12,7 @@ python "$SCRIPT_DIR/../eval/object_hallucination_vqa_llava_amber.py" \
 --model-path ${model_path} \
 --question-file "/home/project/AMBER/data/query/query_generative.json" \
 --image-folder ${image_folder} \
---answers-file "$SCRIPT_DIR/../output/llava-next/${dataset_name}_amber_${type}_colorjitter_v1_no_vcd_${seed}.jsonl" \
+--answers-file "$SCRIPT_DIR/../output/amber/${dataset_name}_amber_${type}_colorjitter_v1_no_vcd_${seed}.jsonl" \
 --cd_alpha $cd_alpha \
 --cd_beta $cd_beta \
 --noise_step $noise_step \
