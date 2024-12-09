@@ -9,6 +9,7 @@ result
 playground/data
 val2014
 *.pt
+*.jpg
 
 answer_files_*
 build
