@@ -4,9 +4,9 @@ import argparse
 from tqdm import tqdm
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--gt_file", type=str, default="../data/POPE/coco/coco_pope_adversarial.json")
-parser.add_argument("--gen_file", type=str, default="../output/pope/popular/coco_pope_popular_answers_with_colorjitter_9k_seed55.jsonl")
-parser.add_argument("--output_file", type=str, default="../output/pope/popular/pope_eval_color_popular.txt")
+parser.add_argument("--gt_file", type=str, default="../data/POPE/coco/coco_pope_random.json")
+parser.add_argument("--gen_file", type=str, default="../output/pope/random/coco_ensemble5_random.json")
+parser.add_argument("--output_file", type=str, default="../output/pope/random/coco_ensemble5_random.txt")
 args = parser.parse_args()
 
 

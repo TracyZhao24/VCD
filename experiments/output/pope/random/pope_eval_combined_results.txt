@@ -1,0 +1,80 @@
+Results for coco_ensemble_123.json:
+Precision: 0.9622144112478032
+Recall: 0.73
+F1: 0.8301743745261562
+Accuracy: 0.8506666666666667
+Yes Proportion: 0.37933333333333336
+Unknown Proportion: 0.0
+
+Results for coco_ensemble_124.json:
+Precision: 0.9666080843585237
+Recall: 0.7333333333333333
+F1: 0.8339651250947687
+Accuracy: 0.854
+Yes Proportion: 0.37933333333333336
+Unknown Proportion: 0.0
+
+Results for coco_ensemble_125.json:
+Precision: 0.9630606860158312
+Recall: 0.73
+F1: 0.8304891922639362
+Accuracy: 0.851
+Yes Proportion: 0.379
+Unknown Proportion: 0.0
+
+Results for coco_ensemble_134.json:
+Precision: 0.9637488947833776
+Recall: 0.7266666666666667
+F1: 0.8285822881033827
+Accuracy: 0.8496666666666667
+Yes Proportion: 0.377
+Unknown Proportion: 0.0
+
+Results for coco_ensemble_135.json:
+Precision: 0.9655172413793104
+Recall: 0.728
+F1: 0.830102622576967
+Accuracy: 0.851
+Yes Proportion: 0.377
+Unknown Proportion: 0.0
+
+Results for coco_ensemble_145.json:
+Precision: 0.9645390070921985
+Recall: 0.7253333333333334
+F1: 0.8280060882800608
+Accuracy: 0.8493333333333334
+Yes Proportion: 0.376
+Unknown Proportion: 0.0
+
+Results for coco_ensemble_234.json:
+Precision: 0.9641294838145232
+Recall: 0.7346666666666667
+F1: 0.8339008702232312
+Accuracy: 0.8536666666666667
+Yes Proportion: 0.381
+Unknown Proportion: 0.0
+
+Results for coco_ensemble_235.json:
+Precision: 0.9673144876325088
+Recall: 0.73
+F1: 0.8320668693009118
+Accuracy: 0.8526666666666667
+Yes Proportion: 0.37733333333333335
+Unknown Proportion: 0.0
+
+Results for coco_ensemble_245.json:
+Precision: 0.9701230228471002
+Recall: 0.736
+F1: 0.8369977255496588
+Accuracy: 0.8566666666666667
+Yes Proportion: 0.37933333333333336
+Unknown Proportion: 0.0
+
+Results for coco_ensemble_345.json:
+Precision: 0.9730700179533214
+Recall: 0.7226666666666667
+F1: 0.82938026013772
+Accuracy: 0.8513333333333334
+Yes Proportion: 0.37133333333333335
+Unknown Proportion: 0.0
+

@@ -50,12 +50,22 @@ def majority_vote_consolidation_plaintext(file1, file2, file3, output_file):
         for entry in consolidated_data:
             outfile.write(json.dumps(entry) + '\n')
 
-
 # File paths
-file1 = 'coco_pope_random_answers_with_cd_seed55.jsonl'
-file2 = 'coco_pope_random_answers_with_box_blur_cd_seed55.jsonl'
-file3 = 'coco_pope_random_answers_with_smaller15_box_blur_cd_seed55.jsonl'
-output_file = 'coco_ensemble_v4.json'
+file1 = 'coco_pope_popular_answers_vcd_seed55.jsonl'
+file2 = 'coco_pope_popular_answers_with_35_box_blur_cd_seed55.jsonl'
+file4 = 'coco_pope_popular_answers_with_colorjitter_9k_seed55.jsonl'
+file5 = 'coco_pope_popular_answers_with_segment_cd_seed55.jsonl'
+file3 = 'coco_pope_popular_boxblur15_seed55.jsonl'
+# output_file = 'coco_ensemble_v4.json'
 
 # Run the consolidation function
-majority_vote_consolidation_plaintext(file1, file2, file3, output_file)
+majority_vote_consolidation_plaintext(file1, file2, file3, 'coco_ensemble_123.json')
+majority_vote_consolidation_plaintext(file1, file2, file4, 'coco_ensemble_124.json')
+majority_vote_consolidation_plaintext(file1, file2, file5, 'coco_ensemble_125.json')
+majority_vote_consolidation_plaintext(file1, file3, file4, 'coco_ensemble_134.json')
+majority_vote_consolidation_plaintext(file1, file3, file5, 'coco_ensemble_135.json')
+majority_vote_consolidation_plaintext(file1, file4, file5, 'coco_ensemble_145.json')
+majority_vote_consolidation_plaintext(file2, file3, file4, 'coco_ensemble_234.json')
+majority_vote_consolidation_plaintext(file2, file3, file5, 'coco_ensemble_235.json')
+majority_vote_consolidation_plaintext(file2, file4, file5, 'coco_ensemble_245.json')
+majority_vote_consolidation_plaintext(file3, file4, file5, 'coco_ensemble_345.json')

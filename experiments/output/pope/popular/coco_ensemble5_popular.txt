@@ -1,0 +1,7 @@
+results for ../output/pope/popular/coco_ensemble5_popular.json
+Precision: 0.9329320722269991
+Recall: 0.7233333333333334
+F1: 0.8148704468644387
+Accuracy: 0.8356666666666667
+yes: 0.38766666666666666
+unknown: 0.0

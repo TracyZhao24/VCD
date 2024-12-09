@@ -1,0 +1,80 @@
+Results for coco_ensemble_123.json:
+Precision: 0.9356223175965666
+Recall: 0.7266666666666667
+F1: 0.8180112570356474
+Accuracy: 0.8383333333333334
+Yes Proportion: 0.3883333333333333
+Unknown Proportion: 0.0
+
+Results for coco_ensemble_124.json:
+Precision: 0.9321888412017167
+Recall: 0.724
+F1: 0.8150093808630394
+Accuracy: 0.8356666666666667
+Yes Proportion: 0.3883333333333333
+Unknown Proportion: 0.0
+
+Results for coco_ensemble_125.json:
+Precision: 0.9339055793991416
+Recall: 0.7253333333333334
+F1: 0.8165103189493433
+Accuracy: 0.837
+Yes Proportion: 0.3883333333333333
+Unknown Proportion: 0.0
+
+Results for coco_ensemble_134.json:
+Precision: 0.9343563512361467
+Recall: 0.7306666666666667
+F1: 0.8200523756079312
+Accuracy: 0.8396666666666667
+Yes Proportion: 0.391
+Unknown Proportion: 0.0
+
+Results for coco_ensemble_135.json:
+Precision: 0.9317988064791134
+Recall: 0.7286666666666667
+F1: 0.8178077066965955
+Accuracy: 0.8376666666666667
+Yes Proportion: 0.391
+Unknown Proportion: 0.0
+
+Results for coco_ensemble_145.json:
+Precision: 0.926271186440678
+Recall: 0.7286666666666667
+F1: 0.8156716417910448
+Accuracy: 0.8353333333333334
+Yes Proportion: 0.3933333333333333
+Unknown Proportion: 0.0
+
+Results for coco_ensemble_234.json:
+Precision: 0.9410234171725932
+Recall: 0.7233333333333334
+F1: 0.8179419525065963
+Accuracy: 0.839
+Yes Proportion: 0.38433333333333336
+Unknown Proportion: 0.0
+
+Results for coco_ensemble_235.json:
+Precision: 0.9432314410480349
+Recall: 0.72
+F1: 0.8166351606805293
+Accuracy: 0.8383333333333334
+Yes Proportion: 0.38166666666666665
+Unknown Proportion: 0.0
+
+Results for coco_ensemble_245.json:
+Precision: 0.9415807560137457
+Recall: 0.7306666666666667
+F1: 0.8228228228228227
+Accuracy: 0.8426666666666667
+Yes Proportion: 0.388
+Unknown Proportion: 0.0
+
+Results for coco_ensemble_345.json:
+Precision: 0.9477351916376306
+Recall: 0.7253333333333334
+F1: 0.8217522658610272
+Accuracy: 0.8426666666666667
+Yes Proportion: 0.38266666666666665
+Unknown Proportion: 0.0
+

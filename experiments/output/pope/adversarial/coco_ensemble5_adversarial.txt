@@ -1,0 +1,7 @@
+results for ../output/pope/adversarial/coco_ensemble5_adversarial.json
+Precision: 0.8980582524271845
+Recall: 0.74
+F1: 0.8114035087719298
+Accuracy: 0.828
+yes: 0.412
+unknown: 0.0

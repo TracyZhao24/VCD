@@ -1,0 +1,4 @@
+CHAIR:           7.0
+Cover:           52.9
+Hal:             31.1
+Cog:             2.9

@@ -10,9 +10,6 @@ def gaussian_blur_yolo_box(image_path, model, blur_width=35):
     # Perform inference
     results = model(image)
 
-    # Display results
-    #results.show()  # This shows the image with detections
-
     # Extract bounding boxes and confidence scores
     boxes = results.xyxy[0].cpu().numpy()  # Get bounding boxes (x1, y1, x2, y2)
     labels = results.names  # Get the label names

@@ -1,0 +1,7 @@
+results for ../output/pope/popular/coco_pope_popular_boxblur15_seed55.jsonl
+Precision: 0.9438103599648815
+Recall: 0.7166666666666667
+F1: 0.8147025388404698
+Accuracy: 0.837
+yes: 0.37966666666666665
+unknown: 0.0
